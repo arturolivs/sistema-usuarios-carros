@@ -1,6 +1,7 @@
 package com.pitangchallenge.usercars.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -44,5 +45,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotEmpty
+    @Valid
     private List<Car> cars = new ArrayList<>();
 }

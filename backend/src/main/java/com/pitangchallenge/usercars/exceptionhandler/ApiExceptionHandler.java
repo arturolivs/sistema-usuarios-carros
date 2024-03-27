@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -30,9 +29,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         Object rejectedValue = null;
 
-        Map<String, String> errors = new HashMap<>();
         for (FieldError fieldError : fieldErrors) {
             rejectedValue = fieldError.getRejectedValue();
+
+            if(fieldError.getRejectedValue() instanceof ArrayList && ((ArrayList) fieldError.getRejectedValue()).isEmpty()) {
+                rejectedValue = null;
+            }
         }
 
         String errorMessage = rejectedValue == null ? "Missing fields" : "Invalid fields";

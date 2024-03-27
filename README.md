@@ -2,7 +2,7 @@
 
 ## ESTÓRIAS DE USUÁRIO
 
-### Estória de Usuário 1: Configuração inicial
+### Estória de Usuário 1: Configuração do projeto
 
 **Como** desenvolvedor,
 **quero** ter um ambiente de desenvolvimento configurado no backend e frontend
@@ -18,8 +18,8 @@
 ### Estória de Usuário 2: Cadastro de Novo Usuário
 
 **Como** usuário,
-**quero** poder criar uma nova conta na aplicação
-**para que** eu possa acessar minhas informações pessoais e realizar operações protegidas.
+**quero** poder criar um novo usuário na aplicação
+**para que** eu possa acessar a aplicação e realizar operações.
 
 **Critérios de Aceitação:**
 

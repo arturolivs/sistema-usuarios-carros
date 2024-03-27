@@ -43,5 +43,6 @@ public class User {
     private String phone;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotEmpty
     private List<Car> cars = new ArrayList<>();
 }

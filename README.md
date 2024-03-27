@@ -30,7 +30,7 @@
 
 **Como** usuário,
 **quero** poder visualizar uma lista de todos os usuários registrados na aplicação
-**para que** eu possa ver informações dos usuários cadastrados.
+**para que** eu possa ver informações de todos usuários cadastrados.
 
 **Critérios de Aceitação:**
 

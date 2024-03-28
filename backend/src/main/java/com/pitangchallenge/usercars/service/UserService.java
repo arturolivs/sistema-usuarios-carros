@@ -6,6 +6,8 @@ import com.pitangchallenge.usercars.exception.UserNotFoundException;
 import com.pitangchallenge.usercars.model.User;
 import com.pitangchallenge.usercars.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +22,19 @@ public class UserService {
         Optional<User> existingUserByEmail = userRepository.findByEmail(user.getEmail());
         if (existingUserByEmail.isPresent()) throw new UserEmailAlreadyUsedException();
 
-        Optional<User> existingUserByLogin = userRepository.findByLogin(user.getLogin());
+        Optional<UserDetails> existingUserByLogin = userRepository.findByLogin(user.getLogin());
         if (existingUserByLogin.isPresent()) throw new UserLoginAlreadyUsedException();
+    }
+
+    private void encodePassword(User user) {
+        String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 
     public User createUser(User user) {
         this.validateEmailAndLoginExisting(user);
+        this.encodePassword(user);
+
         return userRepository.save(user);
     }
 
@@ -45,8 +54,10 @@ public class UserService {
 
     public User update(Long id, User user) {
         this.validateEmailAndLoginExisting(user);
+
         User existingUser = this.findById(id);
         updateUserFields(existingUser, user);
+        this.encodePassword(existingUser);
 
         return userRepository.save(existingUser);
     }

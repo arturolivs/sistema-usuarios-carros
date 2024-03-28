@@ -3,6 +3,7 @@ package com.pitangchallenge.usercars.exceptionhandler;
 import com.pitangchallenge.usercars.exception.ErrorResponse;
 import com.pitangchallenge.usercars.exception.UserEmailAlreadyUsedException;
 import com.pitangchallenge.usercars.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -66,6 +67,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 }

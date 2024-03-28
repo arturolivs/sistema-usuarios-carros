@@ -2,10 +2,13 @@ package com.pitangchallenge.usercars.service;
 
 import com.pitangchallenge.usercars.exception.UserEmailAlreadyUsedException;
 import com.pitangchallenge.usercars.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.exception.UserNotFoundException;
 import com.pitangchallenge.usercars.model.User;
 import com.pitangchallenge.usercars.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +31,12 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+
+
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
 }

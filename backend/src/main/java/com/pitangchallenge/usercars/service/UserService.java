@@ -32,11 +32,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
-
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public void delete(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        userRepository.delete(user);
+    }
 }

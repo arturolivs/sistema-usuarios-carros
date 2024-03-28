@@ -25,8 +25,12 @@ public class SecurityConfig {
        return http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeRequests(authorizeRequests -> authorizeRequests
-                    .anyRequest().permitAll())
+            .authorizeRequests(authorize -> authorize
+                    .requestMatchers(HttpMethod.POST, "/api/signin", "/api/users").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/users", "/api/users/{id}").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/users/{id}").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/api/users/{id}").permitAll()
+                    .anyRequest().authenticated())
             .build();
     }
 

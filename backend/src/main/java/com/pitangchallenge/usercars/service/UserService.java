@@ -21,7 +21,7 @@ public class UserService {
     private void validateEmailAndLoginExisting(User user) {
         Optional<User> existingUserByEmail = userRepository.findByEmail(user.getEmail());
         if (existingUserByEmail.isPresent()) throw new UserEmailAlreadyUsedException();
-
+        
         Optional<UserDetails> existingUserByLogin = userRepository.findByLogin(user.getLogin());
         if (existingUserByLogin.isPresent()) throw new UserLoginAlreadyUsedException();
     }

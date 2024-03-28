@@ -1,7 +1,7 @@
-package com.pitangchallenge.usercars.controller;
+package com.pitangchallenge.usercars.api.controller;
 
-import com.pitangchallenge.usercars.model.User;
-import com.pitangchallenge.usercars.service.UserService;
+import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

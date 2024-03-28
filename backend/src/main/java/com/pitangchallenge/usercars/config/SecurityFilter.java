@@ -1,7 +1,7 @@
 package com.pitangchallenge.usercars.config;
 
-import com.pitangchallenge.usercars.repository.UserRepository;
-import com.pitangchallenge.usercars.service.TokenService;
+import com.pitangchallenge.usercars.domain.repository.UserRepository;
+import com.pitangchallenge.usercars.domain.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

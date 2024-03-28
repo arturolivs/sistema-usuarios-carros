@@ -1,9 +1,8 @@
-package com.pitangchallenge.usercars.exceptionhandler;
+package com.pitangchallenge.usercars.api.exceptionhandler;
 
-import com.pitangchallenge.usercars.exception.ErrorResponse;
-import com.pitangchallenge.usercars.exception.UserEmailAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserLoginAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserNotFoundException;
+import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

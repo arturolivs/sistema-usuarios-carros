@@ -1,4 +1,4 @@
-package com.pitangchallenge.usercars.exception;
+package com.pitangchallenge.usercars.domain.exception;
 
 public class UserEmailAlreadyUsedException extends RuntimeException {
 

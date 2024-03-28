@@ -1,4 +1,4 @@
-package com.pitangchallenge.usercars.model;
+package com.pitangchallenge.usercars.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;

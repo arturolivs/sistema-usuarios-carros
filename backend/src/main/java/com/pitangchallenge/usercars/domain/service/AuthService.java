@@ -1,8 +1,8 @@
-package com.pitangchallenge.usercars.service;
+package com.pitangchallenge.usercars.domain.service;
 
-import com.pitangchallenge.usercars.dto.SignInDTO;
-import com.pitangchallenge.usercars.model.User;
-import com.pitangchallenge.usercars.repository.UserRepository;
+import com.pitangchallenge.usercars.api.dto.SignInDTO;
+import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;

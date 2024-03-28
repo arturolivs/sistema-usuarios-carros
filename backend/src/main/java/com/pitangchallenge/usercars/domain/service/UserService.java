@@ -1,10 +1,10 @@
-package com.pitangchallenge.usercars.service;
+package com.pitangchallenge.usercars.domain.service;
 
-import com.pitangchallenge.usercars.exception.UserEmailAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserLoginAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserNotFoundException;
-import com.pitangchallenge.usercars.model.User;
-import com.pitangchallenge.usercars.repository.UserRepository;
+import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
+import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

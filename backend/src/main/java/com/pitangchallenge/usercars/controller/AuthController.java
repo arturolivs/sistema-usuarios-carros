@@ -1,7 +1,9 @@
 package com.pitangchallenge.usercars.controller;
 
 import com.pitangchallenge.usercars.dto.SignInDTO;
-import com.pitangchallenge.usercars.service.AuthService;
+import com.pitangchallenge.usercars.dto.SignInResponseDTO;
+import com.pitangchallenge.usercars.model.User;
+import com.pitangchallenge.usercars.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +19,15 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/api/signin")
     public ResponseEntity signIn(@RequestBody @Valid SignInDTO data) {
         var loginPassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        this.authenticationManager.authenticate(loginPassword);
+        var auth = this.authenticationManager.authenticate(loginPassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new SignInResponseDTO(token));
     }
 }

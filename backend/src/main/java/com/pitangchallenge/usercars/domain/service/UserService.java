@@ -3,12 +3,14 @@ package com.pitangchallenge.usercars.domain.service;
 import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
 import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
 import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
+import com.pitangchallenge.usercars.domain.model.Car;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +33,11 @@ public class UserService {
         user.setPassword(encodedPassword);
     }
 
+    @Transactional
     public User createUser(User user) {
         this.validateEmailAndLoginExisting(user);
         this.encodePassword(user);
+        user.getCars().stream().forEach(car -> car.setUser(user));
 
         return userRepository.save(user);
     }

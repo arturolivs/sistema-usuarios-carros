@@ -47,17 +47,16 @@ public class User implements UserDetails {
     @NotBlank
     private String phone;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @NotEmpty
     @Valid
     private List<Car> cars = new ArrayList<>();
 
-    private UserRole role;
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

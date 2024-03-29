@@ -43,4 +43,9 @@ public class AuthService implements UserDetailsService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ((User) userDetails).getId();
     }
+
+    public User getLoggedUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (User) userDetails;
+    }
 }

@@ -1,8 +1,7 @@
 package com.pitangchallenge.usercars.api.exceptionhandler;
 
-import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
-import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
-import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.pitangchallenge.usercars.domain.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -59,6 +58,40 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(SignatureVerificationException.class)
+    public ResponseEntity<Object> handleSignatureVerificationException(SignatureVerificationException ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
     @ExceptionHandler(UserEmailAlreadyUsedException.class)
     public ResponseEntity<Object> handleUserEmailAlreadyUsedException(UserEmailAlreadyUsedException e) {
 
@@ -89,6 +122,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(CarLicensePlateAlreadyUsedException.class)
+    public ResponseEntity<Object> handleCarLicensePlateAlreadyUsedException(CarLicensePlateAlreadyUsedException e) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+
+    @ExceptionHandler(DuplicatedCarLicensePlateException.class)
+    public ResponseEntity<Object> handleDuplicatedCarLicensePlateException(DuplicatedCarLicensePlateException e) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
 }

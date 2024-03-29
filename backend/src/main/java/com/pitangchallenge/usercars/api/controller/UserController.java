@@ -16,8 +16,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        User createdUser = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 

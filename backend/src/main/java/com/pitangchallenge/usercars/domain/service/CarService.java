@@ -5,9 +5,7 @@ import com.pitangchallenge.usercars.domain.model.Car;
 import com.pitangchallenge.usercars.domain.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,10 +32,16 @@ public class CarService {
         return carRepository.findByIdAndUserId(id, authService.getUserId());
     }
 
-    public Car create(@Valid @RequestBody Car car) {
+    public Car create(Car car) {
         car.setUser(authService.getLoggedUser());
         this.validateLicensePlateExisting(car);
 
         return carRepository.save(car);
     }
+
+    public void delete(Long id) {
+        Car car = this.findById(id);
+        carRepository.delete(car);
+    }
+
 }

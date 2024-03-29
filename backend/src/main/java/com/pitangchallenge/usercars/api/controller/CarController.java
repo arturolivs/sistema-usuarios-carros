@@ -34,4 +34,9 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCar);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        carService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

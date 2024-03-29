@@ -1,13 +1,9 @@
 package com.pitangchallenge.usercars.domain.service;
 
 import com.pitangchallenge.usercars.domain.exception.CarLicensePlateAlreadyUsedException;
-import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
-import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
 import com.pitangchallenge.usercars.domain.model.Car;
-import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -32,6 +28,10 @@ public class CarService {
 
     public List<Car> findAllByUserId() {
         return carRepository.findByUserId(authService.getUserId());
+    }
+
+    public Car findById(Long id) {
+        return carRepository.findByIdAndUserId(id, authService.getUserId());
     }
 
     public Car create(@Valid @RequestBody Car car) {

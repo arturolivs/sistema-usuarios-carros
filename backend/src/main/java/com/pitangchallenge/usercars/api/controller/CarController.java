@@ -1,6 +1,7 @@
 package com.pitangchallenge.usercars.api.controller;
 
 import com.pitangchallenge.usercars.domain.model.Car;
+import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,11 @@ public class CarController {
     public ResponseEntity<List<Car>> findAllByUserId() {
         List<Car> cars = carService.findAllByUserId();
         return ResponseEntity.ok(cars);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Car> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(carService.findById(id));
     }
 
     @PostMapping

@@ -39,4 +39,12 @@ public class CarController {
         carService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Car> update(@PathVariable Long id,
+                                       @Valid @RequestBody Car car) {
+
+        return ResponseEntity.ok(carService.update(id, car));
+    }
 }

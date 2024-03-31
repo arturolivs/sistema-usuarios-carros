@@ -6,7 +6,9 @@ import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedExcepti
 import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
 import com.pitangchallenge.usercars.domain.model.Car;
 import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.repository.CarRepository;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CarRepository carRepository;
 
     private void validateEmailAndLoginExisting(User user) {
         Optional<User> existingUserByEmail = userRepository.findByEmail(user.getEmail());
@@ -72,6 +77,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    @Transactional
     public User update(Long id, User user) {
         this.validateEmailAndLoginExisting(user);
 
@@ -79,8 +85,39 @@ public class UserService {
         updateUserFields(existingUser, user);
         this.encodePassword(existingUser);
 
-        return userRepository.save(existingUser);
+        var saved = userRepository.save(existingUser);
+
+        updateUsersCars(saved, user.getCars());
+
+        return saved;
     }
+
+    private void updateUsersCars(User userSaved, List<Car> newCars) {
+        // Primeiro, remova todas as entidades Car existentes que não estão mais na nova lista
+        List<Car> carsToRemove = userSaved.getCars().stream()
+                .filter(car -> !newCars.contains(car))
+                .collect(Collectors.toList());
+        carRepository.deleteAll(carsToRemove);
+
+        // Em seguida, atualize ou adicione as novas entidades Car
+        for (Car newCar : newCars) {
+            if (newCar.getId() != null) {
+                // Atualize a entidade Car existente
+                Car existingCar = carRepository.findById(newCar.getId()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+                existingCar.setYear(newCar.getYear());
+                existingCar.setLicensePlate(newCar.getLicensePlate());
+                existingCar.setModel(newCar.getModel());
+                existingCar.setColor(newCar.getColor());
+                existingCar.setUser(userSaved);
+                carRepository.save(existingCar);
+            } else {
+                // Adicione uma nova entidade Car
+                newCar.setUser(userSaved);
+                carRepository.save(newCar);
+            }
+        }
+    }
+
 
     private void updateUserFields(User existingUser, User newUser) {
         existingUser.setFirstName(newUser.getFirstName());

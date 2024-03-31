@@ -47,7 +47,7 @@ public class User implements UserDetails {
     @NotBlank
     private String phone;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotEmpty
     @Valid
     private List<Car> cars = new ArrayList<>();

@@ -18,4 +18,8 @@ import { User } from "../models/user.model";
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
+
+  removeUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}`);
+ }
  }

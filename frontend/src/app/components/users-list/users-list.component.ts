@@ -40,15 +40,20 @@ export class UsersListComponent {
     this.router.navigate(['/user-form', userId]);
    }
 
-  openRemoveDialog(user: User): void {
+   openRemoveDialog(user: User): void {
     const dialogRef = this.dialog.open(RemoveUserDialogComponent, {
       data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-      // Aqui você pode adicionar a lógica para remover o usuário se o resultado for positivo
+      if (result) {
+        this.userService.removeUser(Number(user.id)).subscribe(() => {
+          this.userService.getAllUsers().subscribe(users => {
+            this.data = users;
+          });
+        });
+      }
     });
-  }
+ }
 
 }

@@ -5,9 +5,9 @@ export interface User {
   firstName: string,
   lastName: string,
   email: string;
-  // birthday: Date,
-  // login: string,
+  login: string,
   // password: string,
+  // birthday: Date,
   // phone: string,
   // cars: Car[]
 }

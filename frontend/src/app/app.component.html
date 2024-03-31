@@ -1,4 +1,5 @@
 
+
 <mat-drawer-container autosize>
 
   <mat-drawer #drawer opened="true" class="sidenav" mode="side">
@@ -10,7 +11,8 @@
   </button>
 
   <main class="main-content">
-    <app-user-form />
+    <router-outlet>
+    </router-outlet>
   </main>
 
 </mat-drawer-container>

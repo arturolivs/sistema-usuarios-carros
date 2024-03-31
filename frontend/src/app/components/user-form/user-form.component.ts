@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 import {
   FormControl,
@@ -49,7 +51,7 @@ export class UserFormComponent {
 
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private router: Router) {
     this.userForm = this.fb.group({
       name: [''],
       lastName: [''],
@@ -62,6 +64,9 @@ export class UserFormComponent {
  }
 
   onSubmit() {
+
+    this.router.navigate(['']);
+    console.log('submit')
     if (this.userForm.valid) {
       console.log(this.userForm.value);
       // Aqui você pode adicionar a lógica para enviar os dados do formulário para o servidor

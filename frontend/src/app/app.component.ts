@@ -5,6 +5,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 
+import { UsersListComponent } from './components/users-list/users-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 
 
@@ -13,6 +14,7 @@ const imports = [
   MatIconModule,
   MatSidenavModule,
   MatButtonModule,
+  UsersListComponent,
   UserFormComponent,
 ]
 

@@ -1,3 +1,4 @@
+<h1>Cadastro de usuário</h1>
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <mat-label>Nome</mat-label>
@@ -30,7 +31,7 @@
     <input matInput formControlName="birthday" [matDatepicker]="picker" >
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker disabled></mat-datepicker>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
 

@@ -1,0 +1,24 @@
+mat-drawer-container {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+mat-drawer {
+  min-width: 10rem;
+  padding-left: 2rem;
+}
+
+
+.side-toggle-button {
+  position: absolute;
+  top: 2rem;
+}
+
+.main-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20rem;
+  height: -webkit-fill-available;
+}
+

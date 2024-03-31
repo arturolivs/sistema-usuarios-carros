@@ -1,6 +1,6 @@
-package com.pitangchallenge.usercars.repository;
+package com.pitangchallenge.usercars.domain.repository;
 
-import com.pitangchallenge.usercars.model.User;
+import com.pitangchallenge.usercars.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

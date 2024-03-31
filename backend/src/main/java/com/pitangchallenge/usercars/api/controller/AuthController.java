@@ -1,8 +1,8 @@
-package com.pitangchallenge.usercars.controller;
+package com.pitangchallenge.usercars.api.controller;
 
-import com.pitangchallenge.usercars.dto.SignInDTO;
-import com.pitangchallenge.usercars.dto.SignInResponseDTO;
-import com.pitangchallenge.usercars.service.AuthService;
+import com.pitangchallenge.usercars.api.dto.SignInDTO;
+import com.pitangchallenge.usercars.api.dto.SignInResponseDTO;
+import com.pitangchallenge.usercars.domain.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

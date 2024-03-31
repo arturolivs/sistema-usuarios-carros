@@ -1,7 +1,7 @@
-package com.pitangchallenge.usercars.controller;
+package com.pitangchallenge.usercars.api.controller;
 
-import com.pitangchallenge.usercars.model.User;
-import com.pitangchallenge.usercars.service.UserService;
+import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        User createdUser = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 

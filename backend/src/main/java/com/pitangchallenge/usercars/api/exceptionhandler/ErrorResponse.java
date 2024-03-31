@@ -1,4 +1,4 @@
-package com.pitangchallenge.usercars.exception;
+package com.pitangchallenge.usercars.api.exceptionhandler;
 
 import lombok.Data;
 

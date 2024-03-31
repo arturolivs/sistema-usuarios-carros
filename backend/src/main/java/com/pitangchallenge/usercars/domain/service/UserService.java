@@ -1,17 +1,21 @@
-package com.pitangchallenge.usercars.service;
+package com.pitangchallenge.usercars.domain.service;
 
-import com.pitangchallenge.usercars.exception.UserEmailAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserLoginAlreadyUsedException;
-import com.pitangchallenge.usercars.exception.UserNotFoundException;
-import com.pitangchallenge.usercars.model.User;
-import com.pitangchallenge.usercars.repository.UserRepository;
+import com.pitangchallenge.usercars.domain.exception.DuplicatedCarLicensePlateException;
+import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
+import com.pitangchallenge.usercars.domain.model.Car;
+import com.pitangchallenge.usercars.domain.model.User;
+import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -26,17 +30,33 @@ public class UserService {
         if (existingUserByLogin.isPresent()) throw new UserLoginAlreadyUsedException();
     }
 
+
+    private void checkDuplicateCarLicensePlate(List<Car> cars) {
+
+        boolean hasDuplicate = cars.stream()
+                .collect(Collectors.groupingBy(Car::getLicensePlate, Collectors.counting()))
+                .values()
+                .stream()
+                .anyMatch(count -> count > 1);
+
+        if(hasDuplicate) throw new DuplicatedCarLicensePlateException();
+    }
+
     private void encodePassword(User user) {
         String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
     }
 
-    public User createUser(User user) {
+    @Transactional
+    public User create(User user) {
         this.validateEmailAndLoginExisting(user);
+        this.checkDuplicateCarLicensePlate(user.getCars());
         this.encodePassword(user);
+        user.getCars().stream().forEach(car -> car.setUser(user));
 
         return userRepository.save(user);
     }
+
 
     public List<User> findAll() {
         return userRepository.findAll();

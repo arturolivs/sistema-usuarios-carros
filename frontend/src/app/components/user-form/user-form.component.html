@@ -2,7 +2,7 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <mat-label>Nome</mat-label>
-    <input matInput formControlName="name">
+    <input matInput formControlName="firstName">
   </mat-form-field>
 
   <mat-form-field>
@@ -56,4 +56,6 @@
   <div></div>
 
   <button type="submit" mat-raised-button color="primary">Enviar</button>
+
+  <button type="button" mat-raised-button color="basic" routerLink="">Voltar</button>
 </form>

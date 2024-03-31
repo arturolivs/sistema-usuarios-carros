@@ -6,8 +6,8 @@ export interface User {
   lastName: string,
   email: string;
   login: string,
-  // password: string,
-  // birthday: Date,
-  // phone: string,
+  password?: string,
+  birthday: Date,
+  phone: string,
   // cars: Car[]
 }

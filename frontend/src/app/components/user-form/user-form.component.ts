@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import {
   FormControl,
@@ -18,6 +17,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatButtonModule} from '@angular/material/button';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -33,7 +34,8 @@ const imports = [
         MatInputModule,
         ReactiveFormsModule,
         MatDatepickerModule,
-        MatButtonModule
+        MatButtonModule,
+        RouterModule
     ]
 
 @Component({
@@ -45,15 +47,17 @@ const imports = [
   styleUrl: './user-form.component.scss'
 })
 export class UserFormComponent {
-
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
-
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
-  constructor(private fb: FormBuilder,private router: Router) {
+  constructor(
+    private userService: UserService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute) {
+
     this.userForm = this.fb.group({
-      name: [''],
+      firstName: [''],
       lastName: [''],
       email: ['', [Validators.required, Validators.email]],
       birthday: [''],
@@ -63,16 +67,67 @@ export class UserFormComponent {
     });
  }
 
-  onSubmit() {
+ loadUserData(userId: string): void {
+  // Supondo que você tenha um serviço para buscar os dados do usuário
+  this.userService.getUserById(userId).subscribe(user => {
+     this.userForm.setValue({
+       firstName: user.firstName,
+       lastName: user.lastName,
+       email: user.email,
+       birthday: user.birthday,
+       phone: user.phone,
+       login: user.login,
+       password: user.password
+     });
+  });
+ }
 
-    this.router.navigate(['']);
-    console.log('submit')
-    if (this.userForm.valid) {
-      console.log(this.userForm.value);
-      // Aqui você pode adicionar a lógica para enviar os dados do formulário para o servidor
+ initializeFormForNewUser(): void {
+  this.userForm = this.fb.group({
+    firstName: [''],
+    lastName: [''],
+    email: ['', [Validators.required, Validators.email]],
+    birthday: [''],
+    phone: [''],
+    login: [''],
+    password: ['']
+  });
+ }
+
+ ngOnInit(): void {
+  const userId = this.route.snapshot.paramMap.get('id');
+  if (userId) {
+     // O usuário está tentando editar um usuário existente
+     this.loadUserData(userId);
+  } else {
+     // O usuário está tentando criar um novo usuário
+     this.initializeFormForNewUser();
+  }
+ }
+
+ createUser(userData: User): void {
+  console.log(userData);
+  // Implementar a lógica para criar um novo usuário
+}
+
+updateUser(userId: string, userData: User): void {
+   console.log(userId, userData);
+
+  // Implementar a lógica para atualizar um usuário existente
+ }
+
+
+ onSubmit(): void {
+  if (this.userForm.valid) {
+    const userId = this.route.snapshot.paramMap.get('id');
+    if (userId) {
+      this.updateUser(userId, this.userForm.value);
     } else {
-      console.log('Formulário inválido');
+      this.createUser(this.userForm.value);
     }
+  } else {
+    console.log('Formulário inválido');
+  }
  }
 
 }

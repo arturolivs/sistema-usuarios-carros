@@ -3,55 +3,61 @@
   <mat-form-field>
     <mat-label>Nome</mat-label>
     <input matInput formControlName="firstName">
-  </mat-form-field>
+    <mat-error *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched || userForm.touched">
+      Nome é obrigatório
+    </mat-error>
+ </mat-form-field>
 
-  <mat-form-field>
+ <mat-form-field>
     <mat-label>Sobrenome</mat-label>
     <input matInput formControlName="lastName">
-  </mat-form-field>
+    <mat-error *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched || userForm.touched">
+      Sobrenome é obrigatório
+    </mat-error>
+ </mat-form-field>
 
-  <mat-form-field >
+ <mat-form-field>
     <mat-label>Email</mat-label>
-    <input
-      type="email"
-      matInput formControlName="email"
-      placeholder="Ex. nome@email.com">
+    <input type="email" matInput formControlName="email" placeholder="Ex. seu.nome@email.com">
+    <mat-error *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched || userForm.touched">
+      Email é obrigatório
+    </mat-error>
+ </mat-form-field>
 
-    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
-      <mat-error>Informe um email válido</mat-error>
-    }
-
-    @if (emailFormControl.hasError('required')) {
-      <mat-error>Email <strong>obrigatório</strong></mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field>
+ <mat-form-field>
     <mat-label>Data de nascimento</mat-label>
-    <input matInput formControlName="birthday" [matDatepicker]="picker" >
+    <input matInput formControlName="birthday" [matDatepicker]="picker">
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <mat-error *ngIf="userForm.get('birthday')?.invalid && userForm.get('birthday')?.touched || userForm.touched">
+      Data de nascimento é obrigatória
+    </mat-error>
+ </mat-form-field>
 
-
-  <mat-form-field>
+ <mat-form-field>
     <mat-label>Fone</mat-label>
-    <input matInput formControlName="phone" >
-  </mat-form-field>
+    <input matInput formControlName="phone">
+    <mat-error *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched || userForm.touched">
+      Telefone é obrigatório
+    </mat-error>
+ </mat-form-field>
 
-  <mat-form-field>
+ <mat-form-field>
     <mat-label>Login</mat-label>
     <input matInput formControlName="login">
-  </mat-form-field>
+    <mat-error *ngIf="userForm.get('login')?.invalid && userForm.get('login')?.touched || userForm.touched">
+      Login é obrigatório
+    </mat-error>
+ </mat-form-field>
 
-  <mat-form-field >
+ <mat-form-field>
     <mat-label>Senha</mat-label>
-    <input
-      matInput
-      type="password"
-      formControlName="password"/>
-  </mat-form-field>
+    <input matInput type="password" formControlName="password">
+    <mat-error *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched || userForm.touched">
+      Senha é obrigatória
+    </mat-error>
+ </mat-form-field>
 
   <div></div>
 

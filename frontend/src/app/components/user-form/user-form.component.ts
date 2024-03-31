@@ -19,6 +19,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatButtonModule} from '@angular/material/button';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { CommonModule } from '@angular/common';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -29,6 +30,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 const imports = [
+        CommonModule,
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
@@ -50,32 +52,31 @@ export class UserFormComponent {
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  title: string = '';
+  title: string = 'Cadastro de Usuário';
 
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
 
     this.userForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      email: ['', [Validators.required, Validators.email]],
-      birthday: [''],
-      phone: [''],
-      login: [''],
-      password: ['']
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email:  ['',  [Validators.required, Validators.email]],
+      birthday: ['', Validators.required],
+      phone: ['', Validators.required],
+      login: ['', Validators.required],
+      password: ['', Validators.required],
     });
  }
 
  ngOnInit(): void {
   const userId = this.route.snapshot.paramMap.get('id');
+
   if (userId) {
     this.title = 'Alterar Usuário';
     this.loadUserData(userId);
-  } else {
-    this.title = 'Cadastro de Usuário';
-     this.initializeFormForNewUser();
   }
  }
 
@@ -94,38 +95,37 @@ export class UserFormComponent {
   });
  }
 
- initializeFormForNewUser(): void {
-  this.userForm = this.fb.group({
-    firstName: [''],
-    lastName: [''],
-    email: ['', [Validators.required, Validators.email]],
-    birthday: [''],
-    phone: [''],
-    login: [''],
-    password: ['']
-  });
- }
+
 
  onSubmit(): void {
   if (this.userForm.valid) {
     const userId = this.route.snapshot.paramMap.get('id');
-    if (userId) {
-      this.updateUser(userId, this.userForm.value);
-    } else {
-      this.createUser(this.userForm.value);
-    }
+
+    userId ? this.updateUser(userId, this.userForm.value) : this.createUser(this.userForm.value);
   } else {
+    this.userForm.markAsTouched();
     console.log('Formulário inválido');
   }
- }
+}
 
+createUser(userData: User): void {
+  console.log(userData);
+  // this.userService.createUser(userData).subscribe(response => {
+  //   console.log('Usuário criado com sucesso', response);
+  //   this.router.navigate(['/']);
+  // }, error => {
+  //   console.error('Erro ao criar usuário', error);
+  // });
+}
 
- createUser(userData: User): void {
-    console.log(userData);
-  }
-
-  updateUser(userId: string, userData: User): void {
-    console.log(userId, userData);
-  }
+updateUser(userId: string, userData: User): void {
+  console.log(userData);
+  // this.userService.updateUser(userId, userData).subscribe(response => {
+  //   console.log('Usuário atualizado com sucesso', response);
+  //   this.router.navigate(['/']);
+  // }, error => {
+  //   console.error('Erro ao atualizar usuário', error);
+  // });
+}
 
 }

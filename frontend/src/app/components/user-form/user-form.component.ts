@@ -50,6 +50,7 @@ export class UserFormComponent {
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  title: string = '';
 
   constructor(
     private userService: UserService,
@@ -67,8 +68,19 @@ export class UserFormComponent {
     });
  }
 
+ ngOnInit(): void {
+  const userId = this.route.snapshot.paramMap.get('id');
+  if (userId) {
+    this.title = 'Alterar Usuário';
+    this.loadUserData(userId);
+  } else {
+    this.title = 'Cadastro de Usuário';
+     this.initializeFormForNewUser();
+  }
+ }
+
+
  loadUserData(userId: string): void {
-  // Supondo que você tenha um serviço para buscar os dados do usuário
   this.userService.getUserById(userId).subscribe(user => {
      this.userForm.setValue({
        firstName: user.firstName,
@@ -94,29 +106,6 @@ export class UserFormComponent {
   });
  }
 
- ngOnInit(): void {
-  const userId = this.route.snapshot.paramMap.get('id');
-  if (userId) {
-     // O usuário está tentando editar um usuário existente
-     this.loadUserData(userId);
-  } else {
-     // O usuário está tentando criar um novo usuário
-     this.initializeFormForNewUser();
-  }
- }
-
- createUser(userData: User): void {
-  console.log(userData);
-  // Implementar a lógica para criar um novo usuário
-}
-
-updateUser(userId: string, userData: User): void {
-   console.log(userId, userData);
-
-  // Implementar a lógica para atualizar um usuário existente
- }
-
-
  onSubmit(): void {
   if (this.userForm.valid) {
     const userId = this.route.snapshot.paramMap.get('id');
@@ -129,5 +118,14 @@ updateUser(userId: string, userData: User): void {
     console.log('Formulário inválido');
   }
  }
+
+
+ createUser(userData: User): void {
+    console.log(userData);
+  }
+
+  updateUser(userId: string, userData: User): void {
+    console.log(userId, userData);
+  }
 
 }

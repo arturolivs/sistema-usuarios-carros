@@ -4,14 +4,25 @@ import { FormBuilder,
           FormGroup,
           Validators,
           FormsModule,
-          ReactiveFormsModule, } from '@angular/forms';
+          ReactiveFormsModule,
+          FormControl,
+          FormGroupDirective,
+          NgForm, } from '@angular/forms';
 import { CarService } from '../../services/car.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import {ErrorStateMatcher} from '@angular/material/core';
 import { Car } from '../../models/car.model';
 
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-car-form',
@@ -27,6 +38,7 @@ import {MatButtonModule} from '@angular/material/button';
 export class CarFormComponent {
   carForm: FormGroup;
   title: string = 'Cadastro de Carro';
+  matcher = new MyErrorStateMatcher();
 
   constructor(
      private fb: FormBuilder,
@@ -42,21 +54,54 @@ export class CarFormComponent {
      });
   }
 
-  onSubmit(): void {
-     if (this.carForm.valid) {
-      this.createCar(this.carForm.value);
-     } else {
-       this.carForm.markAsTouched();
-       console.log('Formulário inválido');
-     }
-  }
+  ngOnInit(): void {
+    const carId = this.route.snapshot.paramMap.get('id');
+
+    if (carId) {
+      this.title = 'Alterar Carro';
+      this.loadCarData(carId);
+    }
+ }
+
+ loadCarData(carId: string): void {
+  this.carService.getCarById(carId).subscribe(car => {
+    this.carForm.setValue({
+      year: car.year,
+      licensePlate: car.licensePlate,
+      model: car.model,
+      color: car.color
+    });
+  });
+}
 
   createCar(carData: Car): void {
     this.carService.createCar(carData).subscribe(response => {
-      console.log('Carro criado com sucesso', response);
       this.router.navigate(['/cars']);
     }, error => {
       console.error('Erro ao criar carro', error);
     });
   }
+
+  updateCar(carId: number, carData: Car): void {
+
+    this.carService.updateCar(carId, carData).subscribe({
+      next: (response) => {
+         this.router.navigate(['/cars']);
+      },
+      error: (error) => {
+         console.error('Erro ao atualizar carro', error);
+      }
+     });
+ }
+
+ onSubmit(): void {
+    if (this.carForm.valid) {
+      const carId = this.route.snapshot.paramMap.get('id');
+
+      carId ? this.updateCar(Number(carId), this.carForm.value) : this.createCar(this.carForm.value);
+    } else {
+      this.carForm.markAsTouched();
+      console.log('Formulário inválido');
+    }
+ }
  }

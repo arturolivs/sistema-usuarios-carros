@@ -56,7 +56,7 @@ const imports = [
 export class UserFormComponent {
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+
   title: string = 'Cadastro de Usuário';
 
   constructor(
@@ -64,8 +64,6 @@ export class UserFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router) {
-
-
 
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -98,10 +96,8 @@ export class UserFormComponent {
 
  loadUserData(userId: string): void {
   this.userService.getUserById(userId).subscribe(user => {
-     // Limpe o FormArray cars
      this.cars.clear();
 
-     // Preencha o userForm com os dados do usuário
      this.userForm.setValue({
        firstName: user.firstName,
        lastName: user.lastName,
@@ -112,7 +108,6 @@ export class UserFormComponent {
        password: user.password
      });
 
-     // Preencha o FormArray cars com instâncias de FormGroup para cada carro
      user.cars.forEach((car: Car) => {
        this.cars.push(this.fb.group({
          year: car.year,

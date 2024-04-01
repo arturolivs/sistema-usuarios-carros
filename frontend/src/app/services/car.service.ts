@@ -31,4 +31,22 @@ import { AuthService } from '../auth/auth.service';
     );
   }
 
+  getCarById(id: string): Observable<any> {
+    return this.authService.token.pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.get(`${this.apiUrl}/${id}`, { headers });
+      })
+    );
+  }
+
+
+  updateCar(id: number, car: Car): Observable<any> {
+    return this.authService.token.pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.put(`${this.apiUrl}/${id}`, car, { headers });
+      })
+    );
+  }
 }

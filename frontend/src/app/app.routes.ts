@@ -12,4 +12,5 @@ export const routes: Routes = [
   {path: 'user-form', component: UserFormComponent},
   {path: 'cars', component: CarsListComponent},
   {path: 'car-form', component: CarFormComponent},
+  {path: 'car-form/:id', component: CarFormComponent},
 ];

@@ -1,6 +1,9 @@
 package com.pitangchallenge.usercars.domain.service;
 
-import com.pitangchallenge.usercars.domain.exception.*;
+import com.pitangchallenge.usercars.domain.exception.DuplicatedCarLicensePlateException;
+import com.pitangchallenge.usercars.domain.exception.UserEmailAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserLoginAlreadyUsedException;
+import com.pitangchallenge.usercars.domain.exception.UserNotFoundException;
 import com.pitangchallenge.usercars.domain.model.Car;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;

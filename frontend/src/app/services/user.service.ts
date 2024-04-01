@@ -22,4 +22,12 @@ import { User } from "../models/user.model";
   removeUser(userId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${userId}`);
  }
+
+  createUser(userData: User): Observable<any> {
+    return this.http.post(this.apiUrl, userData);
+  }
+
+  // updateUser(userId: string, userData: User): Observable<any> {
+  //   return this.http.put(`${this.apiUrl}/${userId}`, userData);
+  // }
  }

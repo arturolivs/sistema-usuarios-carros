@@ -10,6 +10,7 @@ import {
   ReactiveFormsModule,
   FormGroup,
   FormBuilder,
+  FormArray,
 } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
@@ -17,9 +18,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatButtonModule} from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { Car } from '../../models/car.model';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -32,12 +36,13 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 const imports = [
         CommonModule,
         FormsModule,
+        RouterModule,
+        ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule,
         MatDatepickerModule,
         MatButtonModule,
-        RouterModule
+        MatListModule,
     ]
 
 @Component({
@@ -68,6 +73,7 @@ export class UserFormComponent {
       phone: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required],
+      cars: this.fb.array([])
     });
  }
 
@@ -80,22 +86,30 @@ export class UserFormComponent {
   }
  }
 
-
  loadUserData(userId: string): void {
   this.userService.getUserById(userId).subscribe(user => {
-     this.userForm.setValue({
+    this.cars.clear();
+
+    this.userForm.setValue({
        firstName: user.firstName,
        lastName: user.lastName,
        email: user.email,
-       birthday: user.birthday,
+       birthday: new Date(user.birthday),
        phone: user.phone,
        login: user.login,
        password: user.password
      });
+
+     user.cars.forEach((car: Car) => {
+       this.cars.push(this.fb.group({
+         year: car.year,
+         licensePlate: car.licensePlate,
+         model: car.model,
+         color: car.color
+       }));
+     });
   });
  }
-
-
 
  onSubmit(): void {
   if (this.userForm.valid) {
@@ -109,13 +123,12 @@ export class UserFormComponent {
 }
 
 createUser(userData: User): void {
-  console.log(userData);
-  // this.userService.createUser(userData).subscribe(response => {
-  //   console.log('Usuário criado com sucesso', response);
-  //   this.router.navigate(['/']);
-  // }, error => {
-  //   console.error('Erro ao criar usuário', error);
-  // });
+  this.userService.createUser(userData).subscribe(response => {
+    console.log('Usuário criado com sucesso', response);
+    this.router.navigate(['/']);
+  }, error => {
+    console.error('Erro ao criar usuário', error);
+  });
 }
 
 updateUser(userId: string, userData: User): void {
@@ -127,5 +140,22 @@ updateUser(userId: string, userData: User): void {
   //   console.error('Erro ao atualizar usuário', error);
   // });
 }
+
+get cars(): FormArray {
+  return this.userForm.get('cars') as FormArray;
+ }
+
+ addCar(): void {
+  this.cars.push(this.fb.group({
+     year: [''],
+     licensePlate: [''],
+     model: [''],
+     color: ['']
+  }));
+ }
+
+ removeCar(index: number): void {
+  this.cars.removeAt(index);
+ }
 
 }

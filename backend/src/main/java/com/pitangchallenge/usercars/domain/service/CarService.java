@@ -22,10 +22,8 @@ public class CarService {
     @Autowired
     private AuthService authService;
 
-    private void validateLicensePlateExisting(Car car) {
-        Optional<Car> existingLicensePlate = Optional.ofNullable(
-                carRepository.findByLicensePlateAndUserId(car.getLicensePlate(), car.getUser().getId()));
-
+    public void validateLicensePlateExisting(Car car) {
+        Optional<Car> existingLicensePlate = carRepository.findByLicensePlateAndUserId(car.getLicensePlate(), car.getUser().getId());
         if (existingLicensePlate.isPresent()) throw new CarLicensePlateAlreadyUsedException();
     }
 
@@ -38,7 +36,7 @@ public class CarService {
     }
 
     public Car findById(Long id) {
-        return carRepository.findByIdAndUserId(id, this.getUpdatedUser().getId());
+        return carRepository.findByIdAndUserId(id, this.getUpdatedUser().getId()).get();
     }
 
     public Car create(Car car) {

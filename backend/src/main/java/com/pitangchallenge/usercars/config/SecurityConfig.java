@@ -33,8 +33,7 @@ public class SecurityConfig {
         responseBody.put("Error!", "Unauthorized");
 
         return http
-                .httpBasic().disable()
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 .headers()
                 .frameOptions().disable()
                 .and()

@@ -1,5 +1,6 @@
 package com.pitangchallenge.usercars.api.controller;
 
+import com.pitangchallenge.usercars.api.dto.UserUpdateDTO;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,16 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Long id,
-                                  @Valid @RequestBody User user) {
+            @Valid @RequestBody UserUpdateDTO data) {
+        User user = new User();
+
+        user.setFirstName(data.getFirstName());
+        user.setLastName(data.getLastName());
+        user.setLogin(data.getLogin());
+        user.setPassword(data.getPassword());
+        user.setPhone(data.getPhone());
+        user.setEmail(data.getEmail());
+        user.setBirthday(data.getBirthday());
 
         return ResponseEntity.ok(userService.update(id, user));
     }

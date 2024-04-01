@@ -149,3 +149,39 @@
 - A aplicação deve fornecer um endpoint `/api/cars/{id}` que permita a atualização das informações de um carro específico do usuário logado, onde `{id}` é o identificador do carro.
 - O endpoint deve ser acessível apenas para usuários autenticados com o token de acesso JWT via header `Authorization`.
 - Após a atualização bem-sucedida, o servidor deve retornar as informações atualizadas do carro especificado.
+
+## SOLUÇÃO
+
+Este projeto foi desenvolvido com o objetivo de criar uma aplicação que gerencia usuários e carros, com autenticação via JWT (JSON Web Tokens). A escolha de tecnologias e abordagens foi feita com base em requisitos específicos, como a necessidade de um servidor embutido, persistência com JPA/Hibernate, e a utilização de um banco de dados em memória para facilitar o desenvolvimento e testes.
+
+### Justificativas e Defesa Técnica
+
+- **Spring Framework**: Escolhido por sua robustez, facilidade de integração com outras tecnologias, e suporte a JPA/Hibernate, tornando a persistência de dados mais simples e eficiente.
+- **JWT para Autenticação**: JWT oferece uma maneira segura e eficiente de autenticar usuários, permitindo a criação de tokens de acesso que podem ser facilmente validados.
+- **Banco de Dados H2**: Utilizado para facilitar o desenvolvimento e testes, pois é um banco de dados em memória que não requer configuração adicional e é rápido para operações de leitura e escrita.
+- **Angular para Frontend**: Escolhido por sua capacidade de criar interfaces de usuário dinâmicas, além de sua facilidade em integrar com o backend.
+- **JPA/Hibernate**: Para a persistência de dados, oferecendo uma camada de abstração que simplifica a interação com o banco de dados, permitindo que o desenvolvedor se concentre na lógica de negócios.
+
+## Como Executar o Projeto
+
+### Pré-requisitos
+
+- Java 8 ou superior
+- Maven 3.x
+- Node.js e npm (para o frontend Angular)
+
+### Passos para Executar o Backend
+
+1. Navegue até o diretório `/backend` do projeto.
+2. Execute o comando `mvn clean install` para construir o projeto e instalar as dependências.
+3. Execute o comando `mvn spring-boot:run` para iniciar o servidor Spring Boot.
+
+### Passos para Executar o Frontend
+
+1. Navegue até o diretório `/frontend` do projeto.
+2. Execute o comando `npm install` para instalar as dependências do projeto Angular.
+3. Execute o comando `ng serve` para iniciar o servidor de desenvolvimento Angular.
+
+### Testes
+
+Para executar os testes unitários do backend, navegue até o diretório `/backend` e execute o comando `mvn test`.

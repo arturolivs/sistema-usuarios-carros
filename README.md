@@ -180,7 +180,7 @@ Este projeto foi desenvolvido com o objetivo de criar uma aplicação que gerenc
 
 1. Navegue até o diretório `/frontend` do projeto.
 2. Execute o comando `npm install` para instalar as dependências do projeto Angular.
-3. Execute o comando `ng serve` para iniciar o servidor de desenvolvimento Angular.
+3. Execute o comando `npm run start` para iniciar o servidor de desenvolvimento Angular.
 
 ### Testes
 

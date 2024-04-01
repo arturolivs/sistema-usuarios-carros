@@ -1,0 +1,38 @@
+<!-- car-form.component.html -->
+<h1>{{title}}</h1>
+<form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+ <mat-form-field>
+    <mat-label>Ano</mat-label>
+    <input matInput formControlName="year">
+    <mat-error *ngIf="carForm.get('year')?.invalid && carForm.get('year')?.touched">
+      Ano é obrigatório
+    </mat-error>
+ </mat-form-field>
+
+ <mat-form-field>
+    <mat-label>Placa</mat-label>
+    <input matInput formControlName="licensePlate">
+    <mat-error *ngIf="carForm.get('licensePlate')?.invalid && carForm.get('licensePlate')?.touched">
+      Placa é obrigatória
+    </mat-error>
+ </mat-form-field>
+
+ <mat-form-field>
+    <mat-label>Modelo</mat-label>
+    <input matInput formControlName="model">
+    <mat-error *ngIf="carForm.get('model')?.invalid && carForm.get('model')?.touched">
+      Modelo é obrigatório
+    </mat-error>
+ </mat-form-field>
+
+ <mat-form-field>
+    <mat-label>Cor</mat-label>
+    <input matInput formControlName="color">
+    <mat-error *ngIf="carForm.get('color')?.invalid && carForm.get('color')?.touched">
+      Cor é obrigatória
+    </mat-error>
+ </mat-form-field>
+
+ <button type="submit" mat-raised-button color="primary">Enviar</button>
+ <button type="button" mat-raised-button color="basic" routerLink="/">Voltar</button>
+</form>

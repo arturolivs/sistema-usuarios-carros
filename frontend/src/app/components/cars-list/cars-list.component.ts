@@ -33,5 +33,9 @@ export class CarsListComponent {
        this.data = cars;
      });
   }
+
+  editCar(carId: number): void {
+    this.router.navigate(['/car-form', carId]);
+   }
  }
 

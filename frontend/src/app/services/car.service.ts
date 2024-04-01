@@ -20,7 +20,15 @@ import { AuthService } from '../auth/auth.service';
         return this.http.get<Car[]>(this.apiUrl, { headers });
       })
     );
- }
+  }
 
+  createCar(car: Car): Observable<any> {
+    return this.authService.token.pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.post<Car>(this.apiUrl, car, { headers });
+      })
+    );
+  }
 
- }
+}

@@ -1,0 +1,1 @@
+web: java -jar target/users-cars-api-0.0.1-SNAPSHOT.jar

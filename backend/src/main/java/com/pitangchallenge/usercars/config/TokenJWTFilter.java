@@ -1,61 +1,51 @@
 package com.pitangchallenge.usercars.config;
 
-import com.pitangchallenge.usercars.domain.exception.TokenNotFoundException;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import com.pitangchallenge.usercars.domain.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-
 @Component
-public class TokenJWTFilter extends OncePerRequestFilter {
+public class TokenJWTFilter extends GenericFilterBean {
 
     @Autowired
     TokenService tokenService;
+
     @Autowired
     UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
-        List<String> publicRoutes = Arrays.asList("/api/signin", "/api/users");
-
-        if (publicRoutes.stream().anyMatch(route -> request.getRequestURI().startsWith(route))) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+            throws IOException, ServletException {
         var token = this.recoverToken(request);
 
-        if(token.isEmpty()) throw new TokenNotFoundException();
+        if (!token.isEmpty()) {
+            var login = tokenService.validateToken(token).get();
+            Optional<UserDetails> user = userRepository.findByLogin(login);
 
-        var login = tokenService.validateToken(token);
-        Optional<UserDetails> user = userRepository.findByLogin(login);
-
-        var authentication = new UsernamePasswordAuthenticationToken(user.get(), null, user.get().getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            var authentication = new UsernamePasswordAuthenticationToken(user.get(), null, user.get().getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
 
         filterChain.doFilter(request, response);
     }
 
-
-    private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return "";
+    private String recoverToken(ServletRequest request) {
+        var authHeader = ((HttpServletRequest) request).getHeader("Authorization");
+        if (authHeader == null)
+            return "";
 
         return authHeader.replace("Bearer", "").trim();
     }

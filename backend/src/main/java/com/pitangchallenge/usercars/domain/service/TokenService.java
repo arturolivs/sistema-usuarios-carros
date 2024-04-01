@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -20,7 +21,7 @@ public class TokenService {
     private String secret;
 
     public String generateToken(User user) {
-        try{
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             String token = JWT.create()
@@ -35,19 +36,21 @@ public class TokenService {
         }
     }
 
-    public String validateToken(String token) {
-        if (token.isEmpty()) throw new TokenNotFoundException();
+    public Optional<String> validateToken(String token) {
+        if (token.isEmpty())
+            return Optional.empty();
 
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-           return JWT.require(algorithm)
-                    .withIssuer("cars-users-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
+            return Optional.of(
+                    JWT.require(algorithm)
+                            .withIssuer("cars-users-api")
+                            .build()
+                            .verify(token)
+                            .getSubject());
         } catch (JWTVerificationException exception) {
-            throw new InvalidTokenException();
+            return Optional.empty();
         }
     }
 

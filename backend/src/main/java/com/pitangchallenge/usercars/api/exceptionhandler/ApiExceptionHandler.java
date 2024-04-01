@@ -21,6 +21,16 @@ import java.util.List;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+
+    private ResponseEntity<Object> createResponseError(HttpStatus status, String message) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(status.value())
+                .message(message).build();
+
+        return ResponseEntity.status(status)
+                .body(errorResponse);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -39,112 +49,53 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         String errorMessage = rejectedValue == null ? "Missing fields" : "Invalid fields";
 
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(errorMessage);
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return createResponseError(HttpStatus.BAD_REQUEST, errorMessage);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Invalid login or password");
-        errorResponse.setErrorCode(HttpStatus.UNAUTHORIZED.value());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(errorResponse);
+        return createResponseError(HttpStatus.UNAUTHORIZED, "Invalid login or password");
     }
 
     @ExceptionHandler(SignatureVerificationException.class)
     public ResponseEntity<Object> handleSignatureVerificationException(SignatureVerificationException ex) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
 
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException ex) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException ex) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(UserEmailAlreadyUsedException.class)
-    public ResponseEntity<Object> handleUserEmailAlreadyUsedException(UserEmailAlreadyUsedException e) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(e.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+    public ResponseEntity<Object> handleUserEmailAlreadyUsedException(UserEmailAlreadyUsedException ex) {
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(UserLoginAlreadyUsedException.class)
-    public ResponseEntity<Object> handleUserLoginAlreadyUsedException(UserLoginAlreadyUsedException e) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(e.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+    public ResponseEntity<Object> handleUserLoginAlreadyUsedException(UserLoginAlreadyUsedException ex) {
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(e.getMessage());
-        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+        return createResponseError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(CarLicensePlateAlreadyUsedException.class)
-    public ResponseEntity<Object> handleCarLicensePlateAlreadyUsedException(CarLicensePlateAlreadyUsedException e) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(e.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+    public ResponseEntity<Object> handleCarLicensePlateAlreadyUsedException(CarLicensePlateAlreadyUsedException ex) {
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
 
     @ExceptionHandler(DuplicatedCarLicensePlateException.class)
-    public ResponseEntity<Object> handleDuplicatedCarLicensePlateException(DuplicatedCarLicensePlateException e) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(e.getMessage());
-        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+    public ResponseEntity<Object> handleDuplicatedCarLicensePlateException(DuplicatedCarLicensePlateException ex) {
+        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }

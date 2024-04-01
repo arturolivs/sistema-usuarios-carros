@@ -65,16 +65,26 @@ export class UserFormComponent {
     private route: ActivatedRoute,
     private router: Router) {
 
+
+
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email:  ['',  [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       birthday: ['', Validators.required],
       phone: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required],
-      cars: this.fb.array([])
-    });
+      cars: this.fb.array([
+         this.fb.group({
+           year: ['', Validators.required],
+           licensePlate: ['', Validators.required],
+           model: ['', Validators.required],
+           color: ['', Validators.required]
+         })
+       ])
+     });
+
  }
 
  ngOnInit(): void {
@@ -88,9 +98,11 @@ export class UserFormComponent {
 
  loadUserData(userId: string): void {
   this.userService.getUserById(userId).subscribe(user => {
-    this.cars.clear();
+     // Limpe o FormArray cars
+     this.cars.clear();
 
-    this.userForm.setValue({
+     // Preencha o userForm com os dados do usuário
+     this.userForm.setValue({
        firstName: user.firstName,
        lastName: user.lastName,
        email: user.email,
@@ -100,6 +112,7 @@ export class UserFormComponent {
        password: user.password
      });
 
+     // Preencha o FormArray cars com instâncias de FormGroup para cada carro
      user.cars.forEach((car: Car) => {
        this.cars.push(this.fb.group({
          year: car.year,
@@ -110,6 +123,7 @@ export class UserFormComponent {
      });
   });
  }
+
 
  onSubmit(): void {
   if (this.userForm.valid) {

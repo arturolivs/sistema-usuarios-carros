@@ -1,0 +1,44 @@
+<!-- cars-list.component.html -->
+<h1>Carros</h1>
+
+<button mat-fab color="primary" aria-label="Novo carro" routerLink="/car-form">
+ <mat-icon>add</mat-icon>
+</button>
+
+<table mat-table [dataSource]="data">
+ <ng-container matColumnDef="year">
+    <th mat-header-cell *matHeaderCellDef> Ano </th>
+    <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+ </ng-container>
+
+ <ng-container matColumnDef="licensePlate">
+    <th mat-header-cell *matHeaderCellDef> Placa </th>
+    <td mat-cell *matCellDef="let element"> {{element.licensePlate}} </td>
+ </ng-container>
+
+ <ng-container matColumnDef="model">
+    <th mat-header-cell *matHeaderCellDef> Modelo </th>
+    <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+ </ng-container>
+
+ <ng-container matColumnDef="color">
+    <th mat-header-cell *matHeaderCellDef> Cor </th>
+    <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+ </ng-container>
+
+ <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="actions-button" mat-mini-fab color="primary" aria-label="Editar carro">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button class="actions-button" mat-mini-fab color="accent" aria-label="Remover carro">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+ </ng-container>
+
+ <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+ <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

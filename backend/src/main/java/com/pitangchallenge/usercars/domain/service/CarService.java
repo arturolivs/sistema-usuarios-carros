@@ -4,6 +4,7 @@ import com.pitangchallenge.usercars.domain.exception.CarLicensePlateAlreadyUsedE
 import com.pitangchallenge.usercars.domain.model.Car;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.repository.CarRepository;
+import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class CarService {
     private CarRepository carRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private AuthService authService;
 
     private void validateLicensePlateExisting(Car car) {
@@ -25,16 +29,20 @@ public class CarService {
         if (existingLicensePlate.isPresent()) throw new CarLicensePlateAlreadyUsedException();
     }
 
+    private User getUpdatedUser() {
+        return userRepository.findById(authService.getLoggedUser().getId()).get();
+    }
+
     public List<Car> findAllByUserId() {
-        return carRepository.findByUserId(authService.getLoggedUser().getId());
+        return carRepository.findByUserId(this.getUpdatedUser().getId());
     }
 
     public Car findById(Long id) {
-        return carRepository.findByIdAndUserId(id, authService.getLoggedUser().getId());
+        return carRepository.findByIdAndUserId(id, this.getUpdatedUser().getId());
     }
 
     public Car create(Car car) {
-        car.setUser(authService.getLoggedUser());
+        car.setUser(this.getUpdatedUser());
         this.validateLicensePlateExisting(car);
 
         return carRepository.save(car);
@@ -47,7 +55,7 @@ public class CarService {
 
 
     public Car update(Long id, Car car) {
-        car.setUser(authService.getLoggedUser());
+        car.setUser(this.getUpdatedUser());
         this.validateLicensePlateExisting(car);
 
         Car existingCar = this.findById(id);
@@ -57,6 +65,7 @@ public class CarService {
     }
 
     private void updateCarFields(Car existingCar, Car newCar) {
+        existingCar.setUser(newCar.getUser());
         existingCar.setModel(newCar.getModel());
         existingCar.setYear(newCar.getYear());
         existingCar.setLicensePlate(newCar.getLicensePlate());

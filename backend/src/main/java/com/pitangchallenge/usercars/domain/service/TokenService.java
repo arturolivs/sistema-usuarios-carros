@@ -41,7 +41,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            return JWT.require(algorithm)
+           return JWT.require(algorithm)
                     .withIssuer("cars-users-api")
                     .build()
                     .verify(token)

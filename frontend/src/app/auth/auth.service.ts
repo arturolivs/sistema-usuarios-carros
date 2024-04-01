@@ -19,7 +19,6 @@ export class AuthService {
  }
 
  setToken(token: string): void {
-    console.log('token', token);
     this.tokenSubject.next(token);
  }
 }

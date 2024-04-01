@@ -24,6 +24,7 @@ import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Car } from '../../models/car.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -63,7 +64,8 @@ export class UserFormComponent {
     private userService: UserService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private snackBar: MatSnackBar) {
 
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -132,12 +134,17 @@ export class UserFormComponent {
 }
 
 createUser(userData: User): void {
-  this.userService.createUser(userData).subscribe(response => {
-    console.log('Usuário criado com sucesso', response);
-    this.router.navigate(['/']);
-  }, error => {
-    console.error('Erro ao criar usuário', error);
-  });
+  this.userService.createUser(userData).subscribe({
+    next: (response) => {
+       this.router.navigate(['/']);
+    },
+    error: ({ error }) => {
+       this.snackBar.open(error.message, 'Fechar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+   });
 }
 
 updateUser(userId: string, userData: User): void {

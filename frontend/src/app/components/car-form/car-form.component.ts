@@ -9,13 +9,14 @@ import { FormBuilder,
           FormGroupDirective,
           NgForm, } from '@angular/forms';
 import { CarService } from '../../services/car.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { Car } from '../../models/car.model';
 
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -31,7 +32,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     MatFormFieldModule,
      MatButtonModule,
      FormsModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    RouterModule],
   templateUrl: './car-form.component.html',
   styleUrl: './car-form.component.scss'
 })
@@ -44,7 +46,8 @@ export class CarFormComponent {
      private fb: FormBuilder,
      private carService: CarService,
      private route: ActivatedRoute,
-     private router: Router
+     private router: Router,
+     private snackBar: MatSnackBar
   ) {
      this.carForm = this.fb.group({
        year: ['', Validators.required],
@@ -75,21 +78,27 @@ export class CarFormComponent {
 }
 
   createCar(carData: Car): void {
-    this.carService.createCar(carData).subscribe(response => {
-      this.router.navigate(['/cars']);
-    }, error => {
-      console.error('Erro ao criar carro', error);
-    });
+    this.carService.createCar(carData).subscribe({
+      next: (response) => {
+         this.router.navigate(['/cars']);
+      },
+      error: ({ error }) => {
+         console.error(error.message);
+         this.snackBar.open(error.message, 'Fechar', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+     });
   }
 
   updateCar(carId: number, carData: Car): void {
-
     this.carService.updateCar(carId, carData).subscribe({
       next: (response) => {
          this.router.navigate(['/cars']);
       },
-      error: (error) => {
-         console.error('Erro ao atualizar carro', error);
+      error: ({error}) => {
+         console.error(error.message);
       }
      });
  }

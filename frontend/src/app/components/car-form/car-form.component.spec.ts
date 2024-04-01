@@ -11,7 +11,7 @@ describe('CarFormComponent', () => {
       imports: [CarFormComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CarFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -93,16 +93,13 @@ public class UserService {
     }
 
     private void updateUsersCars(User userSaved, List<Car> newCars) {
-        // Primeiro, remova todas as entidades Car existentes que não estão mais na nova lista
         List<Car> carsToRemove = userSaved.getCars().stream()
                 .filter(car -> !newCars.contains(car))
                 .collect(Collectors.toList());
         carRepository.deleteAll(carsToRemove);
 
-        // Em seguida, atualize ou adicione as novas entidades Car
         for (Car newCar : newCars) {
             if (newCar.getId() != null) {
-                // Atualize a entidade Car existente
                 Car existingCar = carRepository.findById(newCar.getId()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
                 existingCar.setYear(newCar.getYear());
                 existingCar.setLicensePlate(newCar.getLicensePlate());
@@ -111,7 +108,6 @@ public class UserService {
                 existingCar.setUser(userSaved);
                 carRepository.save(existingCar);
             } else {
-                // Adicione uma nova entidade Car
                 newCar.setUser(userSaved);
                 carRepository.save(newCar);
             }

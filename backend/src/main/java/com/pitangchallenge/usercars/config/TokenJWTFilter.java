@@ -1,5 +1,6 @@
 package com.pitangchallenge.usercars.config;
 
+import com.pitangchallenge.usercars.domain.exception.TokenNotFoundException;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import com.pitangchallenge.usercars.domain.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -39,6 +40,8 @@ public class TokenJWTFilter extends OncePerRequestFilter {
         }
 
         var token = this.recoverToken(request);
+
+        if(token.isEmpty()) throw new TokenNotFoundException();
 
         var login = tokenService.validateToken(token);
         Optional<UserDetails> user = userRepository.findByLogin(login);

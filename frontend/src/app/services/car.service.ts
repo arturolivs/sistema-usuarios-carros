@@ -4,12 +4,14 @@
 import { Car } from '../models/car.model';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../environment';
+
 
  @Injectable({
   providedIn: 'root'
  })
  export class CarService {
-  private apiUrl = 'http://localhost:8080/api/cars';
+  private apiUrl = `${environment.apiUrl}/api/cars`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

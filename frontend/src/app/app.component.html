@@ -3,7 +3,9 @@
 <mat-drawer-container autosize>
 
   <mat-drawer #drawer opened="true" class="sidenav" mode="side">
-    <p>Menu lateral</p>
+    <button mat-raised-button color="primary" type="button" routerLink="login">login</button>
+    <button mat-raised-button color="primary" type="button" routerLink="">Usuários</button>
+    <button mat-raised-button color="primary" type="button" routerLink="cars">Meus carros</button>
   </mat-drawer>
 
   <button class="side-toggle-button" type="button" mat-button (click)="drawer.toggle()">

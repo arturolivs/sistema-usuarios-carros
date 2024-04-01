@@ -1,11 +1,22 @@
 mat-drawer-container {
   width: 100dvw;
   height: 100dvh;
+
+
+  .mat-drawer-inner-container {
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
 }
 
 mat-drawer {
   min-width: 10rem;
   padding-left: 2rem;
+
+
 }
 
 
@@ -21,4 +32,6 @@ mat-drawer {
   margin: 0 20rem;
   height: -webkit-fill-available;
 }
+
+
 

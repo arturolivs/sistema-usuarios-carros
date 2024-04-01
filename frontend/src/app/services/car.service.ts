@@ -49,4 +49,14 @@ import { AuthService } from '../auth/auth.service';
       })
     );
   }
+
+  removeCar(id: number): Observable<any> {
+    return this.authService.token.pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+      })
+    );
+ }
+
 }

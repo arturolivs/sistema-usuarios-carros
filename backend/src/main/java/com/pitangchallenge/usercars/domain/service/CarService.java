@@ -53,7 +53,6 @@ public class CarService {
         carRepository.delete(car);
     }
 
-
     public Car update(Long id, Car car) {
         car.setUser(this.getUpdatedUser());
         this.validateLicensePlateExisting(car);

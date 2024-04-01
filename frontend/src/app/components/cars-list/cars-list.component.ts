@@ -10,11 +10,12 @@ import {MatButtonModule} from '@angular/material/button';
 import { Car } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
 import { Router } from '@angular/router';
+import { RemoveCarDialogComponent } from '../remove-car-dialog/remove-car-dialog.component';
 
 @Component({
   selector: 'app-cars-list',
   standalone: true,
-  imports: [MatTableModule,MatButtonModule, MatIconModule,RouterModule],
+  imports: [MatTableModule, MatButtonModule, MatIconModule, RouterModule],
   templateUrl: './cars-list.component.html',
   styleUrl: './cars-list.component.scss'
 })
@@ -37,5 +38,21 @@ export class CarsListComponent {
   editCar(carId: number): void {
     this.router.navigate(['/car-form', carId]);
    }
+
+   openRemoveDialog(car: Car): void {
+    const dialogRef = this.dialog.open(RemoveCarDialogComponent, {
+      data: car
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.carService.removeCar(Number(car.id)).subscribe(() => {
+          this.carService.getAllCars().subscribe(cars => {
+            this.data = cars;
+          });
+        });
+      }
+    });
+ }
  }
 

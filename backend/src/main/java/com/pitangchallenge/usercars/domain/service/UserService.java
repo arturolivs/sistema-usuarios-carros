@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,6 +58,7 @@ public class UserService {
         this.validateEmailAndLoginExisting(user);
         this.checkDuplicateCarLicensePlate(user.getCars());
         this.encodePassword(user);
+        user.setCreatedAt(new Date());
         user.getCars().stream().forEach(car -> car.setUser(user));
 
         return userRepository.save(user);

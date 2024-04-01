@@ -13,11 +13,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
+
 @Service
 public class AuthService implements UserDetailsService {
 
     @Autowired
-    UserRepository repository;
+    UserRepository userRepository;
 
     @Autowired
     @Lazy
@@ -28,23 +32,22 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByLogin(username).get();
+        return userRepository.findByLogin(username).get();
     }
 
     public String authenticate(SignInDTO data) {
         var loginPassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(loginPassword);
-        return tokenService.generateToken((User) auth.getPrincipal());
-    }
+        User user = (User) auth.getPrincipal();
+        String token = tokenService.generateToken(user);
+        user.setLastLogin(new Date());
+        userRepository.save(user);
 
-
-    public Long getUserId() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ((User) userDetails).getId();
+        return token;
     }
 
     public User getLoggedUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return (User) userDetails;
     }
 }

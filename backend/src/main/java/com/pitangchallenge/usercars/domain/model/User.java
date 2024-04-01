@@ -52,6 +52,12 @@ public class User implements UserDetails {
     @Valid
     private List<Car> cars = new ArrayList<>();
 
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "last_login")
+    private Date lastLogin;
+
     private String role;
 
     @Override

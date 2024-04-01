@@ -26,11 +26,11 @@ public class CarService {
     }
 
     public List<Car> findAllByUserId() {
-        return carRepository.findByUserId(authService.getUserId());
+        return carRepository.findByUserId(authService.getLoggedUser().getId());
     }
 
     public Car findById(Long id) {
-        return carRepository.findByIdAndUserId(id, authService.getUserId());
+        return carRepository.findByIdAndUserId(id, authService.getLoggedUser().getId());
     }
 
     public Car create(Car car) {

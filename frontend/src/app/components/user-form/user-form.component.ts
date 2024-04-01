@@ -24,6 +24,7 @@ import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Car } from '../../models/car.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -56,16 +57,15 @@ const imports = [
 export class UserFormComponent {
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+
   title: string = 'Cadastro de Usuário';
 
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router) {
-
-
+    private router: Router,
+    private snackBar: MatSnackBar) {
 
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -98,10 +98,8 @@ export class UserFormComponent {
 
  loadUserData(userId: string): void {
   this.userService.getUserById(userId).subscribe(user => {
-     // Limpe o FormArray cars
      this.cars.clear();
 
-     // Preencha o userForm com os dados do usuário
      this.userForm.setValue({
        firstName: user.firstName,
        lastName: user.lastName,
@@ -112,7 +110,6 @@ export class UserFormComponent {
        password: user.password
      });
 
-     // Preencha o FormArray cars com instâncias de FormGroup para cada carro
      user.cars.forEach((car: Car) => {
        this.cars.push(this.fb.group({
          year: car.year,
@@ -137,12 +134,17 @@ export class UserFormComponent {
 }
 
 createUser(userData: User): void {
-  this.userService.createUser(userData).subscribe(response => {
-    console.log('Usuário criado com sucesso', response);
-    this.router.navigate(['/']);
-  }, error => {
-    console.error('Erro ao criar usuário', error);
-  });
+  this.userService.createUser(userData).subscribe({
+    next: (response) => {
+       this.router.navigate(['/']);
+    },
+    error: ({ error }) => {
+       this.snackBar.open(error.message, 'Fechar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+   });
 }
 
 updateUser(userId: string, userData: User): void {

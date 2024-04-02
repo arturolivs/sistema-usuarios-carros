@@ -30,7 +30,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("Error!", "Unauthorized");
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)

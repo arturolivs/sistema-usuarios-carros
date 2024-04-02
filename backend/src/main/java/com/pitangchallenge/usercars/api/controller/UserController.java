@@ -1,5 +1,6 @@
 package com.pitangchallenge.usercars.api.controller;
 
+import com.pitangchallenge.usercars.api.dto.UserResponseDTO;
 import com.pitangchallenge.usercars.api.dto.UserUpdateDTO;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.service.UserService;
@@ -13,24 +14,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
+    private UserResponseDTO mapUserToResponse(User user) {
+        return new UserResponseDTO(user.getId(), user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getBirthday(), user.getLogin(), user.getPhone(), user.getCars());
+    }
+
     @PostMapping
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody User user) {
         User createdUser = userService.create(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapUserToResponse(createdUser));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
         List<User> users = userService.findAll();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(users.stream().map(user -> mapUserToResponse(user)).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(mapUserToResponse(user));
     }
 
     @DeleteMapping("/{id}")
@@ -40,7 +50,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id,
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id,
             @Valid @RequestBody UserUpdateDTO data) {
         User user = new User();
 
@@ -52,6 +62,7 @@ public class UserController {
         user.setEmail(data.getEmail());
         user.setBirthday(data.getBirthday());
 
-        return ResponseEntity.ok(userService.update(id, user));
+        User updatedUser = userService.update(id, user);
+        return ResponseEntity.ok(mapUserToResponse(updatedUser));
     }
 }

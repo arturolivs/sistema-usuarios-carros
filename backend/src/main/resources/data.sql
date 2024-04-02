@@ -1,9 +1,9 @@
 INSERT INTO app_user (first_name, last_name, email, birthday, login, password, phone, role)
-VALUES ('John 1', 'Doe 1', 'john.doe1@example.com', '1991-01-01', 'johndoe1', 'password1', '12345678901', 'ROLE_USER'),
-       ('John 2', 'Doe 2', 'john.doe2@example.com', '1992-01-01', 'johndoe2', 'password2', '12345678902', 'ROLE_USER'),
-       ('John 3', 'Doe 3', 'john.doe3@example.com', '1993-01-01', 'johndoe3', 'password3', '12345678902', 'ROLE_USER'),
-       ('John 4', 'Doe 4', 'john.doe4@example.com', '1994-01-01', 'johndoe4', 'password4', '12345678902', 'ROLE_USER'),
-       ('John 5', 'Doe 5', 'john.doe5@example.com', '1995-01-01', 'johndoe5', 'password5', '12345678902', 'ROLE_USER');
+VALUES ('John 1', 'Doe 1', 'john.doe1@example.com', '1991-01-01', 'johndoe1', '$2a$10$28/ZqVOsaghdOOKQ35A0HugxCR5p83O52CxWHVfi15fBofKuc1ar6', '12345678901', 'ROLE_USER'),
+       ('John 2', 'Doe 2', 'john.doe2@example.com', '1992-01-01', 'johndoe2', '$2a$10$28/ZqVOsaghdOOKQ35A0HugxCR5p83O52CxWHVfi15fBofKuc1ar6', '12345678902', 'ROLE_USER'),
+       ('John 3', 'Doe 3', 'john.doe3@example.com', '1993-01-01', 'johndoe3', '$2a$10$28/ZqVOsaghdOOKQ35A0HugxCR5p83O52CxWHVfi15fBofKuc1ar6', '12345678902', 'ROLE_USER'),
+       ('John 4', 'Doe 4', 'john.doe4@example.com', '1994-01-01', 'johndoe4', '$2a$10$28/ZqVOsaghdOOKQ35A0HugxCR5p83O52CxWHVfi15fBofKuc1ar6', '12345678902', 'ROLE_USER'),
+       ('John 5', 'Doe 5', 'john.doe5@example.com', '1995-01-01', 'johndoe5', '$2a$10$28/ZqVOsaghdOOKQ35A0HugxCR5p83O52CxWHVfi15fBofKuc1ar6', '12345678902', 'ROLE_USER');
 
 INSERT INTO car (manufacture_year, license_plate, model, color, user_id)
 VALUES (2010, 'ABC-1234', 'Toyota Corolla', 'Blue', 1),

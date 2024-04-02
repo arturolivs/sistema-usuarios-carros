@@ -1,5 +1,6 @@
 package com.pitangchallenge.usercars.api.controller;
 
+import com.pitangchallenge.usercars.api.dto.MeDTO;
 import com.pitangchallenge.usercars.domain.model.User;
 import com.pitangchallenge.usercars.domain.service.AuthService;
 import com.pitangchallenge.usercars.domain.service.UserService;
@@ -20,7 +21,19 @@ public class MeController {
     private UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<User> getUserInfo() {
-        return ResponseEntity.ok(userService.findById(authService.getLoggedUser().getId()));
+    public ResponseEntity<MeDTO> getUserInfo() {
+        User user = userService.findById(authService.getLoggedUser().getId());
+
+        return ResponseEntity.ok(new MeDTO(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getBirthday(),
+                user.getLogin(),
+                user.getPhone(),
+                user.getCars(),
+                user.getLastLogin(),
+                user.getCreatedAt()
+                ));
     }
 }

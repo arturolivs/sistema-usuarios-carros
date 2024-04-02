@@ -29,7 +29,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        Map<String, String> responseBody = new HashMap<>();
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -45,7 +44,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/users/{id}").permitAll()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new UnauthorizedEntryPoint(responseBody))
+                .authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and()
                 .authorizeRequests()
                 .anyRequest()

@@ -16,7 +16,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     private final HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public UnauthorizedEntryPoint(Map<String, String> responseBody) {
+    public UnauthorizedEntryPoint() {
 
     }
 

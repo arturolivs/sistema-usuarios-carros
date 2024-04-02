@@ -2,6 +2,7 @@ package com.pitangchallenge.usercars.api.exceptionhandler;
 
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.pitangchallenge.usercars.domain.exception.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -12,15 +13,18 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-
 
     private ResponseEntity<Object> createResponseError(HttpStatus status, String message) {
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -33,7 +37,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         BindingResult bindingResult = ex.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -42,7 +46,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         for (FieldError fieldError : fieldErrors) {
             rejectedValue = fieldError.getRejectedValue();
 
-            if(fieldError.getRejectedValue() instanceof ArrayList && ((ArrayList) fieldError.getRejectedValue()).isEmpty()) {
+            if (fieldError.getRejectedValue() instanceof ArrayList
+                    && ((ArrayList) fieldError.getRejectedValue()).isEmpty()) {
                 rejectedValue = null;
             }
         }
@@ -62,14 +67,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException ex) {
-        return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException ex) {
         return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -92,7 +91,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleCarLicensePlateAlreadyUsedException(CarLicensePlateAlreadyUsedException ex) {
         return createResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
-
 
     @ExceptionHandler(DuplicatedCarLicensePlateException.class)
     public ResponseEntity<Object> handleDuplicatedCarLicensePlateException(DuplicatedCarLicensePlateException ex) {

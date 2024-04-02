@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SignIn } from '../models/signin.model';
+import { environment } from '../../environment';
 
 @Injectable({
  providedIn: 'root'
@@ -10,7 +11,7 @@ import { SignIn } from '../models/signin.model';
 export class AuthService {
  private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
  public token: Observable<string> = this.tokenSubject.asObservable();
- private apiUrl = 'http://localhost:8080/api/signin';
+ private apiUrl = `${environment.apiUrl}/api/signin`;
 
  constructor(private http: HttpClient) {}
 

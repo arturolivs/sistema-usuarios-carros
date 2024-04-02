@@ -1,4 +1,4 @@
-<h1>Cadastro de Usuário</h1>
+<h1>Alterar Usuário</h1>
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <mat-label>Nome</mat-label>
@@ -61,31 +61,7 @@
 
   <div></div>
 
-  <div formArrayName="cars">
-    <div *ngFor="let car of cars.controls; let i = index" [formGroupName]="i">
-       <h3>Carro {{ i + 1 }}</h3>
-       <mat-form-field >
-         <mat-label>Ano</mat-label>
-         <input matInput formControlName="year">
-       </mat-form-field>
-       <mat-form-field>
-         <mat-label>Placa</mat-label>
-         <input matInput formControlName="licensePlate">
-       </mat-form-field>
-       <mat-form-field>
-         <mat-label>Modelo</mat-label>
-         <input matInput formControlName="model">
-       </mat-form-field>
-       <mat-form-field>
-         <mat-label>Cor</mat-label>
-         <input matInput formControlName="color">
-       </mat-form-field>
-       <button *ngIf="cars.controls.length > 1" mat-raised-button color="warn" (click)="removeCar(i)">Remover Carro</button>
-    </div>
-   </div>
-   <button type="button"  mat-raised-button color="primary" (click)="addCar()">Adicionar Carro</button>
-
-  <button type="submit" mat-raised-button color="primary">Enviar</button>
+  <button type="submit" mat-raised-button color="primary">Alterar</button>
 
   <button type="button" mat-raised-button color="basic" routerLink="">Voltar</button>
 </form>

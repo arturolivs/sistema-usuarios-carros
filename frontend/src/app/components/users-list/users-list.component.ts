@@ -37,7 +37,7 @@ export class UsersListComponent {
    }
 
   editUser(userId: number): void {
-    this.router.navigate(['/user-form', userId]);
+    this.router.navigate(['/user-edit-form', userId]);
    }
 
    openRemoveDialog(user: User): void {

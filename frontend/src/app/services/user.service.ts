@@ -27,7 +27,7 @@ import { User } from "../models/user.model";
     return this.http.post(this.apiUrl, userData);
   }
 
-  // updateUser(userId: string, userData: User): Observable<any> {
-  //   return this.http.put(`${this.apiUrl}/${userId}`, userData);
-  // }
+  updateUser(userId: string, userData: User): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${userId}`, userData);
+  }
  }

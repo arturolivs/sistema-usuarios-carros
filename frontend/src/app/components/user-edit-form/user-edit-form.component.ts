@@ -10,7 +10,6 @@ import {
   ReactiveFormsModule,
   FormGroup,
   FormBuilder,
-  FormArray,
 } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
@@ -23,7 +22,6 @@ import { MatListModule } from '@angular/material/list';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
-import { Car } from '../../models/car.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -47,20 +45,21 @@ const imports = [
     ]
 
 @Component({
-  selector: 'app-user-form',
+  selector: 'app-user-edit-form',
   standalone: true,
   providers: [provideNativeDateAdapter()],
   imports: imports,
-  templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss'
+  templateUrl: './user-edit-form.component.html',
+  styleUrl: './user-edit-form.component.scss'
 })
-export class UserFormComponent {
+export class UserFormEditComponent {
   userForm: FormGroup;
   matcher = new MyErrorStateMatcher();
 
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar) {
 
@@ -72,29 +71,48 @@ export class UserFormComponent {
       phone: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required],
-      cars: this.fb.array([
-         this.fb.group({
-           year: ['', Validators.required],
-           licensePlate: ['', Validators.required],
-           model: ['', Validators.required],
-           color: ['', Validators.required]
-         })
-       ])
      });
 
  }
 
+ ngOnInit(): void {
+  const userId = this.route.snapshot.paramMap.get('id');
+
+  if (userId) {
+    this.loadUserData(userId);
+  }
+ }
+
+ loadUserData(userId: string): void {
+  this.userService.getUserById(userId).subscribe(user => {
+     this.userForm.setValue({
+       firstName: user.firstName,
+       lastName: user.lastName,
+       email: user.email,
+       birthday: new Date(user.birthday),
+       phone: user.phone,
+       login: user.login,
+       password: user.password
+     });
+  });
+ }
+
+
  onSubmit(): void {
   if (this.userForm.valid) {
-    this.createUser(this.userForm.value);
+    const userId = this.route.snapshot.paramMap.get('id');
+  if (userId) {
+    this.updateUser(userId, this.userForm.value);
+
+  }
   } else {
     this.userForm.markAsTouched();
     console.log('Formulário inválido');
   }
 }
 
-createUser(userData: User): void {
-  this.userService.createUser(userData).subscribe({
+updateUser(userId: string, userData: User): void {
+  this.userService.updateUser(userId, userData).subscribe({
     next: (response) => {
        this.router.navigate(['/']);
     },
@@ -105,23 +123,6 @@ createUser(userData: User): void {
       });
     }
    });
-}
-
-get cars(): FormArray {
-  return this.userForm.get('cars') as FormArray;
- }
-
- addCar(): void {
-  this.cars.push(this.fb.group({
-     year: [''],
-     licensePlate: [''],
-     model: [''],
-     color: ['']
-  }));
- }
-
- removeCar(index: number): void {
-  this.cars.removeAt(index);
- }
+  }
 
 }

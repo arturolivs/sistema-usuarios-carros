@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.pitangchallenge.usercars.domain.exception.CustomTokenExpiredException;
 import com.pitangchallenge.usercars.domain.exception.InvalidTokenException;
 import com.pitangchallenge.usercars.domain.model.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +50,8 @@ public class TokenService {
                             .build()
                             .verify(token)
                             .getSubject());
+        } catch (TokenExpiredException ex) {
+            throw new CustomTokenExpiredException();
         } catch (JWTVerificationException exception) {
             throw new InvalidTokenException();
         }

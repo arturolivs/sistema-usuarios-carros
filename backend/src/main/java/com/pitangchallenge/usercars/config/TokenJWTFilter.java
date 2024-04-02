@@ -1,7 +1,9 @@
 package com.pitangchallenge.usercars.config;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pitangchallenge.usercars.api.exceptionhandler.ErrorResponse;
+import com.pitangchallenge.usercars.domain.exception.CustomTokenExpiredException;
 import com.pitangchallenge.usercars.domain.exception.InvalidTokenException;
 import com.pitangchallenge.usercars.domain.repository.UserRepository;
 import com.pitangchallenge.usercars.domain.service.TokenService;
@@ -74,7 +76,10 @@ public class TokenJWTFilter extends GenericFilterBean {
             filterChain.doFilter(request, response);
         } catch (InvalidTokenException ex) {
             throwHttpError(httpResponse, response, HttpStatus.BAD_REQUEST.value(), ex);
-        } catch (Exception ex) {
+        } catch (CustomTokenExpiredException ex) {
+            throwHttpError(httpResponse, response, HttpStatus.UNAUTHORIZED.value(), ex);
+        }
+        catch (Exception ex) {
             throwHttpError(httpResponse, response, HttpStatus.INTERNAL_SERVER_ERROR.value(), ex);
         }
     }

@@ -2,7 +2,7 @@
 <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
  <mat-form-field>
     <mat-label>Ano</mat-label>
-    <input matInput formControlName="year">
+    <input type="number" matInput formControlName="year">
     <mat-error *ngIf="carForm.get('year')?.invalid && carForm.get('year')?.touched">
       Ano é obrigatório
     </mat-error>
